@@ -25,32 +25,39 @@ int main()
 
 
     int dir = 0; // to decide the direction of the ball
-    sf::RenderWindow window(sf::VideoMode(750, 480), "SFML Tennis Game"); // creating a window of certain size
+    sf::RenderWindow window(sf::VideoMode(1000, 480), "SFML Tennis Game"); // creating a window of certain size
     sf::Texture t1;
-    //sf::View view(sf::FloatRect(0, 0, 750, 480)); // Initial viewport setup
-    //window.setView(view);
-    // setting a variable for the background
+//    sf::View view(sf::FloatRect(0, 0, 750, 480)); // Initial viewport setup
+//    window.setView(view);
+//     setting a variable for the background
     t1.loadFromFile("images/ping_pong.jpeg");
     sf::Sprite background(t1); // loading the background
     window.setFramerateLimit(30); // sprite frame rate
 
+
     sf::Text text2;
     sf::Text text3;
     sf::Text text4;
+    sf::Text text5;
+    sf::Text text6;
+    sf::Text text7;
+    sf::Text text8;
+
+
 
     background.setScale(1.80,1.90); // changing the scale of the background
 
 
     // Set up the paddles
     sf::RectangleShape paddle1(sf::Vector2f(20, 100));
-    paddle1.setPosition(50, 200);
+
 
     paddle1.setFillColor(Color::Black);
     paddle1.setOutlineColor(Color::Magenta);
     paddle1.setOutlineThickness(3);
 
     sf::RectangleShape paddle2(sf::Vector2f(20, 100));
-    paddle2.setPosition(680, 200);
+
 
     paddle2.setFillColor(Color::Black);
     paddle2.setOutlineColor(Color::Magenta);
@@ -58,7 +65,7 @@ int main()
 
     // Set up the ball
     sf::CircleShape ball(15);
-    ball.setPosition(375, 240);
+    //ball.setPosition(375, 240);
 
     ball.setFillColor(Color::Green);
     ball.setOutlineColor(Color::Black);
@@ -81,8 +88,8 @@ int main()
 
 
     // Load font for text display
-      sf::Font font;
-      sf::Font font2;
+    sf::Font font;
+    sf::Font font2;
 
     const float movementSpeed = 200.0f;
 
@@ -100,6 +107,9 @@ int main()
 
     int score1 = 0;
     int score2 = 0;
+
+    string YourScore1;
+    string YourScore2;
 
     while (window.isOpen())
     {
@@ -149,10 +159,10 @@ int main()
 
                 }
             }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-            {
-                state = toss;
-            }
+//            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+//            {
+//                state = toss;
+//            }
         }
 
         if (state == toss)
@@ -209,6 +219,8 @@ int main()
                             // Perform animation here (e.g., scale the text)
                             text2.setScale(1.2f, 1.2f);
                             state = ready;
+                            ball.setPosition(70, 240);
+
                         }
                         else if (text4.getGlobalBounds().contains(mousePos))
                         {
@@ -216,6 +228,7 @@ int main()
                             // Perform animation here (e.g., scale the text)
                             text4.setScale(1.2f, 1.2f);
                             state = ready;
+                            ball.setPosition(650, 240);
                         }
                     }
                 }
@@ -237,10 +250,51 @@ int main()
 
         if (state == ready)
         {
+
+            paddle1.setPosition(50, 200);
+            paddle2.setPosition(680, 200);
+            YourScore1 = to_string(score1);
+            YourScore2 = to_string(score2);
+
+            text5.setFont(font); // select the font
+            text5.setCharacterSize(24); // setting the character size in pixels
+            text5.setFillColor(sf::Color::Red); // setting the color of the font
+            text5.setStyle(sf::Text::Bold); // text style
+            text5.setPosition(800,400);
+            text5.setString("PLayer 1: ");
+
+            text6.setFont(font); // select the font
+            text6.setCharacterSize(24); // setting the character size in pixels
+            text6.setFillColor(sf::Color::Red); // setting the color of the font
+            text6.setStyle(sf::Text::Bold); // text style
+            text6.setPosition(800,440);
+            text6.setString("Player 2: ");
+
+            text7.setFont(font); // select the font
+            text7.setCharacterSize(24); // setting the character size in pixels
+            text7.setFillColor(sf::Color::Red); // setting the color of the font
+            text7.setStyle(sf::Text::Bold); // text style
+            text7.setPosition(960,400);
+            text7.setString(YourScore1);
+
+            text8.setFont(font); // select the font
+            text8.setCharacterSize(24); // setting the character size in pixels
+            text8.setFillColor(sf::Color::Red); // setting the color of the font
+            text8.setStyle(sf::Text::Bold); // text style
+            text8.setPosition(960,440);
+            text8.setString(YourScore2);
+
+
+
+
             window.draw(background);
             window.draw(paddle1);
             window.draw(paddle2);
             window.draw(ball);
+            window.draw(text5);
+            window.draw(text6);
+            window.draw(text7);
+            window.draw(text8);
 
             sf::Event event;
             while (window.pollEvent(event))
@@ -316,25 +370,27 @@ int main()
                 ballVelocity.x = -ballVelocity.x; // Ensure negative x velocity
                 angleDist = std::uniform_real_distribution<float>(-45.0f, 45.0f);
                 angle = angleDist(gen);
-                ballVelocity.y = 20 * sin(angle * M_PI / 180.0f);
+                ballVelocity.y = 20* sin(angle * M_PI / 180.0f);
             }
 
-            if (ball.getPosition().y < 0 || ball.getPosition().y + ball.getRadius() * 2 > window.getSize().y)
+            if (ball.getPosition().y < 0 || ball.getPosition().y + ball.getRadius() * 2 > 480)
             {
                 ballVelocity.y = -ballVelocity.y;
             }
-            if (ball.getPosition().x < 0 || ball.getPosition().x + ball.getRadius() * 2 > window.getSize().x)
+            if (ball.getPosition().x < 0 || ball.getPosition().x + ball.getRadius() * 2 > 750)
             {
                 ballVelocity.x = -ballVelocity.x;
 
             }
-            if(ball.getPosition().x+ ball.getRadius() * 2 > window.getSize().x)
+            if(ball.getPosition().x+ ball.getRadius() * 2 > 750)
             {
                 score2++;
+                YourScore2 = to_string(score2);
             }
             if(ball.getPosition().x < 0)
             {
                 score1++;
+                YourScore1 = to_string(score1);
             }
 
             if (score1 > 10 || score2 > 10)
@@ -370,6 +426,7 @@ int main()
                 if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
                 {
                     paddle2.move(20,0);
+
                 }
 
                 if (event.type == sf::Event::MouseButtonPressed) {
@@ -410,6 +467,33 @@ int main()
                 }
 
             }
+            text5.setFont(font); // select the font
+            text5.setCharacterSize(24); // setting the character size in pixels
+            text5.setFillColor(sf::Color::Red); // setting the color of the font
+            text5.setStyle(sf::Text::Bold); // text style
+            text5.setPosition(800,400);
+            text5.setString("PLayer 1: ");
+
+            text6.setFont(font); // select the font
+            text6.setCharacterSize(24); // setting the character size in pixels
+            text6.setFillColor(sf::Color::Red); // setting the color of the font
+            text6.setStyle(sf::Text::Bold); // text style
+            text6.setPosition(800,440);
+            text6.setString("Player 2: ");
+
+            text7.setFont(font); // select the font
+            text7.setCharacterSize(24); // setting the character size in pixels
+            text7.setFillColor(sf::Color::Red); // setting the color of the font
+            text7.setStyle(sf::Text::Bold); // text style
+            text7.setPosition(960,400);
+            text7.setString(YourScore1);
+
+            text8.setFont(font); // select the font
+            text8.setCharacterSize(24); // setting the character size in pixels
+            text8.setFillColor(sf::Color::Red); // setting the color of the font
+            text8.setStyle(sf::Text::Bold); // text style
+            text8.setPosition(960,440);
+            text8.setString(YourScore2);
 
 
 
@@ -422,6 +506,10 @@ int main()
             window.draw(paddle1);
             window.draw(paddle2);
             window.draw(ball);
+            window.draw(text5);
+            window.draw(text6);
+            window.draw(text7);
+            window.draw(text8);
 
         }
 
