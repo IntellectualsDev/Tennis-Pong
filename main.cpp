@@ -42,6 +42,8 @@ int main()
     sf::Text text6;
     sf::Text text7;
     sf::Text text8;
+    sf::Text text9;
+    sf::Text text10;
 
 
 
@@ -75,6 +77,16 @@ int main()
     // Set up ball movement
     Vector2f ballVelocity(5, 5);
 
+    sf::RectangleShape button(sf::Vector2f(200, 30));
+    button.setFillColor(Color::Black);
+    button.setOutlineColor(Color:: Red);
+    button.setOutlineThickness(5);
+
+    sf::RectangleShape button2(sf::Vector2f(200, 30));
+    button2.setFillColor(Color::Black);
+    button2.setOutlineColor(Color:: Red);
+    button2.setOutlineThickness(5);
+
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<float> angleDist(45.0f, 135.0f); // Adjust angle range as needed
@@ -104,6 +116,17 @@ int main()
         // Handle font loading error
         return -1;
     }
+    text9.setFont(font);
+    text9.setCharacterSize(20);
+    text9.setFillColor(sf::Color:: Yellow);
+    text9.setStyle(sf::Text::Bold);
+    text9.setPosition(300,400);
+
+    text10.setFont(font);
+    text10.setCharacterSize(20);
+    text10.setFillColor(sf::Color:: Yellow);
+    text10.setStyle(sf::Text::Bold);
+    text10.setPosition(300,400);
 
     int score1 = 0;
     int score2 = 0;
@@ -136,28 +159,68 @@ int main()
             text2.setString("      WELCOME!!\n"
                             "This is Tennis Pong!\n"
                             "Face-off with your Opponent!\n "
-                            "First person to reach 10 points moves ahead\n "
-                            "Good luck!! Press N to begin"); // the contents of the string that needs to be displayed
+                            "First person to reach 10 points\n "
+                            " WINS !! "
+                            "Good luck!!"); // the contents of the string that needs to be displayed
+
+            text9.setPosition(300,400);
+            text9.setString("Choose Opponent");
+            button.setPosition(300, 400);
 
             window.draw(text2);
+            window.draw(button);
+            window.draw(text9);
+
+
 
             Event p; // a new event type variable
             while (window.pollEvent(p)) // window event
             {
-                if (p.type == Event::KeyPressed) // check if the event is regarding a key being pressed
+                if (p.type == sf::Event::Closed)
                 {
-                    if (p.key.code == Keyboard::N) // if the key pressed is 'N'
-                    {
-                        state = toss; // the state of the game is changed; it's changed to the play state
-
+                    window.close();
+                }
+                if (p.type == sf::Event::MouseMoved)
+                {
+                    sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                    if (text9.getGlobalBounds().contains(mousePos)) {
+                        // Mouse is hovering over the text
+                        text9.setFillColor(sf::Color::Red);
+                        window.draw(text9);
                     }
-                    if (p.type == sf::Event::Closed)
-                    {
-                        window.close();
-                    }
-
 
                 }
+
+                if (p.type == sf::Event::MouseButtonPressed)
+                {
+                    if (p.mouseButton.button == sf::Mouse::Left)
+                    {
+                        sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                        if (text9.getGlobalBounds().contains(mousePos))
+                        {
+                            // Mouse left button is pressed while hovering over the text
+                            // Perform animation here (e.g., scale the text)
+                            text9.setScale(1.2f, 1.2f);
+                            state = toss;
+
+
+                        }
+
+                    }
+                }
+
+                if (p.type == sf::Event::MouseButtonReleased)
+                {
+                    if (p.mouseButton.button == sf::Mouse::Left)
+                    {
+                        // Mouse left button is released
+                        // Reset the text scale to its original size
+                        text9.setScale(1.0f, 1.0f);
+
+                    }
+
+                }
+
             }
 //            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 //            {
@@ -519,17 +582,29 @@ int main()
             text3.setCharacterSize(35); // setting the character size in pixels
             text3.setFillColor(sf::Color::Yellow); // setting the color of the font
             text3.setStyle(sf::Text::Bold); // text style
-            text3.setPosition(50,100); // position of the text
+            text3.setPosition(50,200); // position of the text
             if (score1 > score2)
             {
-                text3.setString("Player 1 wins! You move to the second round\n"
-                                " Press N to start again, press P to end"); // the contents of the string that needs to be displayed
+                text3.setString("       Player 1 wins!\n "
+                                "You move to the second round\n"); // the contents of the string that needs to be displayed
+                text9.setPosition(100,400);
+                text9.setString("Next Round");
+                button.setPosition(100, 400);
+                text10.setPosition(500,400);
+                text10.setString("End Game");
+                button2.setPosition(500,400);
 
             }
             else
             {
-                text3.setString("Player 2 wins! You move to the second round\n"
-                                " Press N to start again, press P to end"); // the contents of the string that needs to be displayed
+                text3.setString("       Player 2 wins!\n "
+                                "You move to the second round\n"); // the contents of the string that needs to be displayed
+                text9.setPosition(100,400);
+                text9.setString("Next Round");
+                button.setPosition(100, 400);
+                text10.setPosition(500,400);
+                text10.setString("End Game");
+                button2.setPosition(500,400);
             }
             sf::Event event;
             while (window.pollEvent(event))
@@ -551,6 +626,10 @@ int main()
 
             window.draw(background);
             window.draw(text3);
+            window.draw(button);
+            window.draw(button2);
+            window.draw(text9);
+            window.draw(text10);
 
         }
 
