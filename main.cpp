@@ -34,6 +34,24 @@ int main()
     sf::Sprite background(t1); // loading the background
     window.setFramerateLimit(30); // sprite frame rate
 
+    sf::SoundBuffer tHit;
+    if (!tHit.loadFromFile("sound/tennis-hit2.wav"))
+    {
+        return -1;
+    }
+
+    sf::SoundBuffer clickSound;
+    if (!clickSound.loadFromFile("sound/button.wav"))
+    {
+        return -1;
+    }
+
+    sf::Sound hit;
+
+    sf::Sound click;
+
+    hit.setBuffer(tHit);
+    click.setBuffer(clickSound);
 
     sf::Text text2;
     sf::Text text3;
@@ -198,6 +216,7 @@ int main()
                         sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                         if (text9.getGlobalBounds().contains(mousePos))
                         {
+                            click.play();
                             // Mouse left button is pressed while hovering over the text
                             // Perform animation here (e.g., scale the text)
                             text9.setScale(1.2f, 1.2f);
@@ -275,6 +294,7 @@ int main()
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
+                        click.play();
                         sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                         if (text2.getGlobalBounds().contains(mousePos))
                         {
@@ -364,6 +384,7 @@ int main()
             {
                 if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)
                 {
+                    click.play();
                     state = play;
                 }
                 if (event.type == sf::Event::Closed)
@@ -418,6 +439,7 @@ int main()
                 ball.getPosition().y + ball.getRadius() >= paddle1.getPosition().y &&
                 ball.getPosition().y - ball.getRadius() <= paddle1.getPosition().y + paddle1.getSize().y)
             {
+                hit.play();
                 // Ball is approaching from the right, reverse x and set a random y velocity
                 ballVelocity.x = -ballVelocity.x; // Ensure positive x velocity
                 angleDist = std::uniform_real_distribution<float>(-45.0f, 45.0f);
@@ -429,6 +451,7 @@ int main()
                      ball.getPosition().y + ball.getRadius() >= paddle2.getPosition().y &&
                      ball.getPosition().y - ball.getRadius() <= paddle2.getPosition().y + paddle2.getSize().y)
             {
+                hit.play();
                 // Ball is approaching from the left, reverse x and set a random y velocity
                 ballVelocity.x = -ballVelocity.x; // Ensure negative x velocity
                 angleDist = std::uniform_real_distribution<float>(-45.0f, 45.0f);
@@ -438,10 +461,12 @@ int main()
 
             if (ball.getPosition().y < 0 || ball.getPosition().y + ball.getRadius() * 2 > 480)
             {
+
                 ballVelocity.y = -ballVelocity.y;
             }
             if (ball.getPosition().x < 0 || ball.getPosition().x + ball.getRadius() * 2 > 750)
             {
+
                 ballVelocity.x = -ballVelocity.x;
 
             }

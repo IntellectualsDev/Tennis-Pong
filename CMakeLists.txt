@@ -13,6 +13,9 @@ include_directories(/usr/local/include)
 configure_file(images/Hello.png images/Hello.png COPYONLY)
 configure_file(images/ping_pong.jpeg images/ping_pong.jpeg COPYONLY)
 configure_file(font/font.ttf font/font.ttf COPYONLY)
+configure_file(sound/tennis-hit.wav sound/tennis-hit.wav COPYONLY)
+configure_file(sound/tennis-hit2.wav sound/tennis-hit2.wav COPYONLY)
+configure_file(sound/button.wav sound/button.wav COPYONLY)
 
 
 find_package(SFML 2.6 COMPONENTS system window graphics network audio REQUIRED)
