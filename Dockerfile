@@ -23,7 +23,9 @@ EXPOSE 7777/udp
 # "apt-get clean" will delete the leftover .deb files from the install
 # "rm -rf "var/lib/apt/lists/*" deletes the package list downloaded by "apt-get update"
 
-
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -o Debug::pkgProblemResolver=yes build-essential libstdc++-11-dev wget git libtool autoconf libsfml-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # fetch the ENet source code from GitHub, then build, compile, and install
     # ldconfig creates links and cache to trusted directory (usr/lib || lib)
